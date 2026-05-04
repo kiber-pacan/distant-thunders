@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "package": "com.distantthunders.neoforge.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "minVersion": "0.8",
+  "refmap": "distantthunders.mixins.neoforge.refmap.json",
+  "client": [
+  ],
+  "mixins": [
+  ],
+  "injectors": {
+    "defaultRequire": 0
+  }
+}
