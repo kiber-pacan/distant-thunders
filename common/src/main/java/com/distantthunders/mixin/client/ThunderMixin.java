@@ -53,7 +53,7 @@ public class ThunderMixin {
 
 
         float maxDistance = 128;
-        float pitchBonus = (float) Math.clamp(1.0 - (Math.min(distanceToEntity, maxDistance) / maxDistance), 0.1F, 1F);
+        float pitchBonus = (float) distantthunders$clamp(1.0 - (Math.min(distanceToEntity, maxDistance) / maxDistance), 0.1F, 1F);
 
         level
                 .playLocalSound(
@@ -75,5 +75,10 @@ public class ThunderMixin {
         float maxDistance = 128;
 
         return (float) (baseVolume * Math.max(1.0 - (Math.min(distance, maxDistance) / maxDistance), 0.24));
+    }
+
+
+    int distantthunders$clamp(int value, int min, int max) {
+        return Math.max(min, Math.min(max, value));
     }
 }
