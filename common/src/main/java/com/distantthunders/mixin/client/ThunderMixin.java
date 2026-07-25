@@ -78,7 +78,18 @@ public class ThunderMixin {
     }
 
 
+    @Unique
     int distantthunders$clamp(int value, int min, int max) {
+        return Math.max(min, Math.min(max, value));
+    }
+
+    @Unique
+    float distantthunders$clamp(float value, float min, float max) {
+        return Math.max(min, Math.min(max, value));
+    }
+
+    @Unique
+    double distantthunders$clamp(double value, double min, double max) {
         return Math.max(min, Math.min(max, value));
     }
 }

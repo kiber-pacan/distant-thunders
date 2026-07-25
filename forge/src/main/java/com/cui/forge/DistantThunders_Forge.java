@@ -1,7 +1,7 @@
 package com.cui.forge;
 
-import com.cui.core.CUI;
-import com.cui.core.ColorScreen;
+
+import com.distantthunders.DistantThunders;
 import dev.architectury.platform.forge.EventBuses;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.ConfigScreenHandler;
@@ -12,21 +12,14 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import net.minecraftforge.fml.loading.FMLLoader;
 
-@Mod(CUI.MOD_ID)
-public final class CUI_Forge {
-    public CUI_Forge(FMLJavaModLoadingContext context) {
-        EventBuses.registerModEventBus(CUI.MOD_ID, MinecraftForge.EVENT_BUS);
-        CUI.initializeServer();
-
-        context.registerExtensionPoint(
-                ConfigScreenHandler.ConfigScreenFactory.class,
-                () -> new ConfigScreenHandler.ConfigScreenFactory(
-                        (client, parent) -> new ColorScreenNew(parent))
-        );
+@Mod(DistantThunders.MOD_ID)
+public final class DistantThunders_Forge {
+    public DistantThunders_Forge(FMLJavaModLoadingContext context) {
+        EventBuses.registerModEventBus(DistantThunders.MOD_ID, MinecraftForge.EVENT_BUS);
+        DistantThunders.initializeServer();
 
         if (FMLLoader.getDist() == Dist.CLIENT) {
-            CUI.initializeClient();
-
+            DistantThunders.initializeClient();
         }
     }
 }

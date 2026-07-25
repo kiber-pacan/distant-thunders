@@ -2,26 +2,9 @@ plugins {
     id 'com.gradleup.shadow'
 }
 
-
-
 architectury {
     platformSetupLoomIde()
     fabric()
-}
-
-repositories {
-    // Cloth config
-    maven { url "https://maven.shedaniel.me/" }
-
-    // Mod menu
-    maven { url = "https://maven.terraformersmc.com/" }
-    maven{ url = "https://maven.nucleoid.xyz/" }
-
-    // YACL
-    maven {
-        name 'Xander Maven'
-        url 'https://maven.isxander.dev/releases'
-    }
 }
 
 configurations {
@@ -41,14 +24,38 @@ configurations {
     }
 }
 
+repositories {
+    maven {
+        name 'Xander Maven'
+        url 'https://maven.isxander.dev/releases'
+    }
+    maven {
+        name = "Terraformers"
+        url = "https://maven.terraformersmc.com/releases/"
+    }
+    maven {
+        url "https://maven.nucleoid.xyz/"
+        name "Nucleoid"
+    }
+    maven {
+        url = "https://api.modrinth.com/maven"
+    }
+}
+int version_index = Integer.valueOf(rootProject.index)
+
 dependencies {
-    modImplementation "net.fabricmc:fabric-loader:$rootProject.fabric_loader_version"
+    def impl_type = (version_index < 18) ? "modImplementation" : "implementation"
 
-    modImplementation "net.fabricmc.fabric-api:fabric-api:$rootProject.fabric_api_version"
+    add impl_type, "net.fabricmc:fabric-loader:$rootProject.fabric_loader_version"
+    add impl_type, "net.fabricmc.fabric-api:fabric-api:$rootProject.fabric_api_version"
+    add impl_type, "dev.architectury:architectury-fabric:$rootProject.architectury_api_version"
+    add impl_type, "com.terraformersmc:modmenu:${rootProject.modmenu_version}"
 
-    modImplementation "dev.architectury:architectury-fabric:$rootProject.architectury_api_version"
+    if (version_index < 18)
+        common(project(path: ':common', configuration: 'namedElements')) { transitive false }
+    else
+        common(project(path: ':common')) { transitive false }
 
-    modImplementation("com.terraformersmc:modmenu:${rootProject.modmenu_version}")
 
     implementation "com.electronwill.night-config:core:3.6.6"
     shadowBundle "com.electronwill.night-config:core:3.6.6"
@@ -56,8 +63,15 @@ dependencies {
     implementation "com.electronwill.night-config:toml:3.6.6"
     shadowBundle "com.electronwill.night-config:toml:3.6.6"
 
-    common(project(path: ':common', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':common', configuration: 'transformProductionFabric')
+}
+
+processResources {
+    inputs.property 'version', project.version
+
+    filesMatching('fabric.mod.json') {
+        expand version: project.version
+    }
 }
 
 shadowJar {
@@ -65,6 +79,18 @@ shadowJar {
     archiveClassifier = 'dev-shadow'
 }
 
-remapJar {
-    inputFile.set shadowJar.archiveFile
+if (version_index < 18) {
+    remapJar {
+        inputFile.set shadowJar.archiveFile
+    }
+} else {
+    jar {
+        archiveClassifier.set("dev")
+    }
+    shadowJar {
+        archiveClassifier.set("")
+    }
+    assemble {
+        dependsOn("shadowJar")
+    }
 }

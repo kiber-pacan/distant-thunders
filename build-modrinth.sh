@@ -15,7 +15,7 @@ for i in $(seq 13 $END); do
         sh gradlew :forge:build :forge:modrinth -Pindex="$y"
     fi
 
-    mv ./*/build/libs/cui-*-[!c]*-*[[:digit:]].jar "buildAllJars"
+    mv ./*/build/libs/distantthunders-*-[!c]*-*[[:digit:]].jar "buildAllJars"
     ((y=y+1))
 done
 
